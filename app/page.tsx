@@ -159,6 +159,83 @@ export default async function AdminDashboard() {
             description="Browse all captions in the system"
             color="#10b981"
           />
+          <NavCard
+            href="/admin/humor-flavors"
+            icon="🎭"
+            title="Humor Flavors"
+            description="View humor flavors and their steps"
+            color="#f59e0b"
+          />
+          <NavCard
+            href="/admin/humor-mix"
+            icon="🎲"
+            title="Humor Mix"
+            description="Configure caption generation mix"
+            color="#ec4899"
+          />
+          <NavCard
+            href="/admin/caption-examples"
+            icon="📚"
+            title="Caption Examples"
+            description="Manage training examples (CRUD)"
+            color="#06b6d4"
+          />
+          <NavCard
+            href="/admin/terms"
+            icon="📖"
+            title="Terms Dictionary"
+            description="Manage terminology (CRUD)"
+            color="#8b5cf6"
+          />
+          <NavCard
+            href="/admin/llm-providers"
+            icon="🤖"
+            title="LLM Providers"
+            description="Manage AI providers (CRUD)"
+            color="#3b82f6"
+          />
+          <NavCard
+            href="/admin/llm-models"
+            icon="🧠"
+            title="LLM Models"
+            description="Manage AI models (CRUD)"
+            color="#06b6d4"
+          />
+          <NavCard
+            href="/admin/llm-prompt-chains"
+            icon="⛓️"
+            title="Prompt Chains"
+            description="View LLM prompt executions"
+            color="#f59e0b"
+          />
+          <NavCard
+            href="/admin/llm-model-responses"
+            icon="💬"
+            title="LLM Responses"
+            description="View all LLM responses"
+            color="#10b981"
+          />
+          <NavCard
+            href="/admin/caption-requests"
+            icon="📋"
+            title="Caption Requests"
+            description="View all caption generation requests"
+            color="#ec4899"
+          />
+          <NavCard
+            href="/admin/allowed-domains"
+            icon="🔐"
+            title="Allowed Domains"
+            description="Manage signup domains (CRUD)"
+            color="#ef4444"
+          />
+          <NavCard
+            href="/admin/whitelisted-emails"
+            icon="✉️"
+            title="Whitelisted Emails"
+            description="Manage allowed emails (CRUD)"
+            color="#8b5cf6"
+          />
         </div>
 
         {/* Two Column Layout */}
@@ -232,7 +309,7 @@ export default async function AdminDashboard() {
               🆕 Recent Signups
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {recentUsers?.slice(0, 10).map((user: any) => (
+              {recentUsers?.slice(0, 2).map((user: any) => (
                 <div
                   key={user.id}
                   style={{
