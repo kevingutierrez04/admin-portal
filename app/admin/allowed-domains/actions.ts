@@ -10,9 +10,12 @@ export async function createDomain(formData: FormData) {
 
   console.log('Creating domain:', { apexDomain })
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('allowed_signup_domains')
-    .insert({ apex_domain: apexDomain })
+    .insert({ apex_domain: apexDomain, created_by_user_id: user.id, modified_by_user_id: user.id })
     .select()
     .single()
 

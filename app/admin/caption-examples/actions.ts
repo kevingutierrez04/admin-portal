@@ -12,6 +12,9 @@ export async function createCaptionExample(formData: FormData) {
   const priority = parseInt(formData.get('priority') as string) || 0
   const imageId = formData.get('image_id') as string | null
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('caption_examples')
     .insert({
@@ -20,6 +23,8 @@ export async function createCaptionExample(formData: FormData) {
       explanation,
       priority,
       image_id: imageId || null,
+      created_by_user_id: user.id,
+      modified_by_user_id: user.id,
     })
     .select()
     .single()
@@ -41,6 +46,9 @@ export async function updateCaptionExample(exampleId: number, formData: FormData
   const priority = parseInt(formData.get('priority') as string) || 0
   const imageId = formData.get('image_id') as string | null
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('caption_examples')
     .update({
@@ -49,7 +57,7 @@ export async function updateCaptionExample(exampleId: number, formData: FormData
       explanation,
       priority,
       image_id: imageId || null,
-      modified_datetime_utc: new Date().toISOString(),
+      modified_by_user_id: user.id,
     })
     .eq('id', exampleId)
     .select()

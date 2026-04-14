@@ -8,9 +8,12 @@ export async function createWhitelistedEmail(formData: FormData) {
 
   const email = formData.get('email_address') as string
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('whitelist_email_addresses')
-    .insert({ email_address: email })
+    .insert({ email_address: email, created_by_user_id: user.id, modified_by_user_id: user.id })
     .select()
     .single()
 

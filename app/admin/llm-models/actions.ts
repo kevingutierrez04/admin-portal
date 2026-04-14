@@ -12,12 +12,17 @@ export async function createModel(formData: FormData) {
 
   console.log('Creating model:', { name, providerModelId, llmProviderId })
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('llm_models')
     .insert({
       name,
       provider_model_id: providerModelId,
       llm_provider_id: llmProviderId,
+      created_by_user_id: user.id,
+      modified_by_user_id: user.id,
     })
     .select()
     .single()
@@ -39,13 +44,16 @@ export async function updateModel(modelId: number, formData: FormData) {
   const providerModelId = formData.get('provider_model_id') as string
   const llmProviderId = parseInt(formData.get('llm_provider_id') as string)
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('llm_models')
     .update({
       name,
       provider_model_id: providerModelId,
       llm_provider_id: llmProviderId,
-      modified_datetime_utc: new Date().toISOString(),
+      modified_by_user_id: user.id,
     })
     .eq('id', modelId)
     .select()

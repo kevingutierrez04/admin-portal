@@ -10,10 +10,15 @@ export async function createProvider(formData: FormData) {
 
   console.log('Creating provider:', { name })
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('llm_providers')
     .insert({
       name,
+      created_by_user_id: user.id,
+      modified_by_user_id: user.id,
     })
     .select()
     .single()
@@ -33,11 +38,14 @@ export async function updateProvider(providerId: number, formData: FormData) {
 
   const name = formData.get('name') as string
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('llm_providers')
     .update({
       name,
-      modified_datetime_utc: new Date().toISOString(),
+      modified_by_user_id: user.id,
     })
     .eq('id', providerId)
     .select()

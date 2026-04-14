@@ -11,6 +11,9 @@ export async function createTerm(formData: FormData) {
   const example = formData.get('example') as string
   const termTypeId = parseInt(formData.get('term_type_id') as string)
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('terms')
     .insert({
@@ -18,6 +21,8 @@ export async function createTerm(formData: FormData) {
       definition,
       example,
       term_type_id: termTypeId,
+      created_by_user_id: user.id,
+      modified_by_user_id: user.id,
     })
     .select()
     .single()
@@ -39,6 +44,9 @@ export async function updateTerm(termId: number, formData: FormData) {
   const example = formData.get('example') as string
   const termTypeId = parseInt(formData.get('term_type_id') as string)
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { data, error } = await supabase
     .from('terms')
     .update({
@@ -46,7 +54,7 @@ export async function updateTerm(termId: number, formData: FormData) {
       definition,
       example,
       term_type_id: termTypeId,
-      modified_datetime_utc: new Date().toISOString(),
+      modified_by_user_id: user.id,
     })
     .eq('id', termId)
     .select()
